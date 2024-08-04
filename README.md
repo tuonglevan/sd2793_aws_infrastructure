@@ -41,7 +41,8 @@ You can define variables in a terraform.tfvars file or at the CLI. Below are the
 - image_id: AWS AMI ID
 
 For example, your terraform.tfvars file might look like:
-```region                   = "ap-southeast-1"
+```hcl-terraform
+region                   = "ap-southeast-1"
 vpc_base_name            = "Devops for Devs"
 cidr_block               = "10.0.0.0/16"
 availability_zones       = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
