@@ -2,20 +2,23 @@
 
 This module handles the creation of VPC, EC2, ECR, and EKS resources on AWS using Terraform.
 
-## Prerequisites
+# Prerequisites
 
 - AWS account
 - AWS CLI installed and configured
 - Terraform 1.9.3 installed
+# Architecture
+## Infrastructure
+![Infrastructure](doc/img/infrastructure.png)
 
-## Modules
+# Modules
 
 - **VPC**: The module provisions a VPC with the necessary subnets, gateway, and route tables.
 - **EC2**: The module creates an EC2 instance.
 - **ECR**: The module sets up an Elastic Container Registry.
 - **EKS**: The module creates an Elastic Kubernetes Service cluster.
 
-## Usage
+# Usage
 
 1. Clone the repository ```git clone https://github.com/tuonglevan/sd2793_aws_infastructure.git```
 2. Initialize Terraform
@@ -25,7 +28,7 @@ This module handles the creation of VPC, EC2, ECR, and EKS resources on AWS usin
 
 After running `terraform apply --var-file "terraform.tfvars"`, you will see the plan and you must type `yes` to proceed with the creation of the resources.
 
-## Variables
+# Variables
 You can define variables in a terraform.tfvars file or at the CLI. Below are the expected variables:
 
 - region: AWS region (ie. "ap-southeast-1")
@@ -55,13 +58,11 @@ image_id                 = "ami-012c2e8e24e2ae21d"
 instance_type            = "t2.small"
 ```
 
-## Resources Created
+# Resources Created
 
 This module will create:
 
-- A VPC with necessary subnets, gateway, and route tables
+- A VPC with necessary subnets, gateway, nat gateway, and route tables
 - An EC2 instance
 - An ECR repository
 - An EKS cluster
-
-**Note:** Make sure to review and update the variables in the `main.tf` as per your requirement.
