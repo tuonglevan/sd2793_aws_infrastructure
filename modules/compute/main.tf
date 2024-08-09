@@ -4,29 +4,15 @@ resource "aws_instance" "jenkins_docker_server" {
   subnet_id = var.subnet_id
   vpc_security_group_ids = var.vpc_security_group_ids
   iam_instance_profile = var.iam_instance_profile
+  key_name = var.jenkins_key_name
 
   ebs_block_device {
     device_name = "/dev/xvda"
     volume_type = "gp3"
-    volume_size = 20           # size in GB
+    volume_size = 20
   }
 
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo yum update -y
-              sudo yum install -y docker
-              sudo systemctl start docker
-              sudo systemctl enable docker
-
-              sudo dnf install java-21-amazon-corretto.x86_64 -y
-              sudo wget -O /etc/yum.repos.d/jenkins.repo  https://pkg.jenkins.io/redhat-stable/jenkins.repo
-              sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
-              sudo yum install -y jenkins
-
-              sudo usermod -a -G docker jenkins
-              sudo systemctl start jenkins
-              sudo systemctl enable jenkins
-              EOF
+  user_data = file("${path.module}/scripts/install_docker_jenkins.sh")
 
   tags = {
     Name = "Jenkins Docker Server"

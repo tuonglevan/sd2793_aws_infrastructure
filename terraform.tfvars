@@ -9,6 +9,10 @@ private_subnet_ips = ["10.0.48.0/20", "10.0.64.0/20", "10.0.80.0/20"]
 ecr_repos = ["nodejs-backend", "react-frontend"]
 image_tag_mutability = "MUTABLE"
 enable_scan_on_push = true
+# EKS
+eks_cluster_name = "devops-eks-cluster"
+# KeyPair
+jenkins_keypair_path = "./keypair/ubuntu-jenkins.pub"
 # Compute
-instance_type = "t2.small"
-image_id      = "ami-012c2e8e24e2ae21d"
+instance_type = "t3.small"
+image_id      = "ami-060e277c0d4cce553"

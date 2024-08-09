@@ -46,6 +46,11 @@ variable "enable_scan_on_push" {
   description = "Enable vulnerability scanning on push to ECR"
   default     = true
 }
+# EKS
+variable "eks_cluster_name" {
+  type        = string
+  description = "The name of the EKS cluster"
+}
 
 # Compute
 variable "image_id" {
@@ -58,8 +63,8 @@ variable "instance_type" {
   description = "Type of EC2 instance to launch. Example: t2.small"
   default     = "t3.small"
 }
-
-# variable "keypair_path" {
-#   type = string
-#   default = "./keypair/udemy-key.pub"
-# }
+# KeyPair
+variable "jenkins_keypair_path" {
+  type        = string
+  description = "The path to the SSH key pair file. This key pair is used for SSH access to the instances."
+}

@@ -23,3 +23,9 @@ variable "vpc_security_group_ids" {
 variable "iam_instance_profile" {
   description = "The IAM instance profile name for the instance"
 }
+
+variable "jenkins_key_name" {
+  type = string
+  description = "The name of the keypair to use for the instance"
+  nullable = false
+}

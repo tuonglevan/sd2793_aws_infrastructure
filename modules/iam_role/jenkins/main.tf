@@ -1,6 +1,6 @@
 locals {
-  jenkins_role_name = "jenkins"
-  jenkins_ecr_policy = "jenkins_ecr_policy"
+  role_name = "jenkins"
+  ecr_policy = "jenkins_ecr_policy"
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {
@@ -39,18 +39,18 @@ data "aws_iam_policy_document" "ecr_policy" {
 }
 
 resource "aws_iam_role_policy" "jenkins_ecr_policy" {
-  name = local.jenkins_ecr_policy
+  name = local.ecr_policy
   role = aws_iam_role.jenkins.id
 
   policy = data.aws_iam_policy_document.ecr_policy.json
 }
 
 resource "aws_iam_instance_profile" "jenkins" {
-  name = local.jenkins_role_name
+  name = local.role_name
   role = aws_iam_role.jenkins.name
 }
 
 resource "aws_iam_role" "jenkins" {
-  name               = local.jenkins_role_name
+  name               = local.role_name
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
