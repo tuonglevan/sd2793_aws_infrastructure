@@ -13,9 +13,10 @@ module "eks_iam_role" {
 # Complete VPC creation
 module "networking" {
   source             = "./modules/networking"
-  region = var.region
+  region             = var.region
   vpc_base_name      = var.vpc_base_name
   cidr_block         = var.cidr_block
+  create_nat_gateway = var.create_nat_gateway
   public_subnet_ips  = var.public_subnet_ips
   private_subnet_ips = var.private_subnet_ips
   availability_zones = var.availability_zones
