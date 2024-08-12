@@ -12,9 +12,11 @@ variable "eks_cluster_name" {
 variable "eks_cluster_sg_name" {
   description = "Name of the EKS cluster Security Group"
   type        = string
+  default = "eks_cluster_sg"
 }
 
 variable "eks_nodes_sg_name" {
   description = "Name of the EKS node group Security Group"
   type        = string
+  default = "eks_node_sg"
 }

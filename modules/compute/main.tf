@@ -6,13 +6,12 @@ resource "aws_instance" "jenkins_docker_server" {
   iam_instance_profile = var.iam_instance_profile
   key_name = var.jenkins_key_name
 
-  ebs_block_device {
-    device_name = "/dev/xvda"
+  root_block_device {
     volume_type = "gp3"
     volume_size = 20
   }
 
-  user_data = file("${path.module}/scripts/install_docker_jenkins.sh")
+  user_data = file("${path.module}/scripts/install_docker_jenkins")
 
   tags = {
     Name = "Jenkins Docker Server"

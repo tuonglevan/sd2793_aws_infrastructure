@@ -30,6 +30,6 @@ variable "availability_zones" {
 
 variable "create_nat_gateway" {
   type        = bool
-  default     = false
+  default     = true
   description = "Set to true to create the NAT gateway, set to false to skip creation"
 }

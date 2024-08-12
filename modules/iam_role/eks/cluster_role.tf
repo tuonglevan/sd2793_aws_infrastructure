@@ -1,3 +1,7 @@
+locals {
+  cluster_role_name = "EKSClusterRole"
+}
+
 data "aws_iam_policy_document" "assume_role_policy" {
   statement {
 	actions = ["sts:AssumeRole"]
@@ -9,7 +13,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
 }
 
 resource "aws_iam_role" "eks_cluster" {
-  name               = var.eks_cluster_name
+  name               = local.cluster_role_name
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
 #

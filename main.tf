@@ -8,7 +8,6 @@ module "jenkins_iam_role" {
 # EKS
 module "eks_iam_role" {
   source = "./modules/iam_role/eks"
-  eks_cluster_name = var.eks_cluster_name
 }
 
 # Complete VPC creation
@@ -54,53 +53,18 @@ module "ecr" {
   image_tag_mutability = var.image_tag_mutability
 }
 
-# module "eks_cluster_and_worker_nodes" {
-#   source = "./modules/eks"
-#   # EKS Cluster
-#   eks_cluster_name = var.eks_cluster_name
-#   eks_cluster_role_arn = module.eks_iam_role.role_arn
-#   eks_cluster_security_group_ids = [module.security.eks_cluster_sg, module.security.eks_node_sg]
-#   eks_cluster_iam_policy_arn = module.eks_iam_role.iam_policy_arn
-#   eks_cluster_subnet_ids = flatten([module.networking.public_subnet_ids, module.networking.private_subnet_ids])
-#   # EKS node/worker
-# }
-
-
-# module "eks" {
-#   source  = "terraform-aws-modules/eks/aws"
-#   version = "~> 20.0"
-#
-#   cluster_version = "1.30"
-#   cluster_name    = "devops-eks-cluster"
-#
-#   cluster_endpoint_public_access  = true
-#
-#   cluster_addons = {
-#     coredns                = {}
-#     eks-pod-identity-agent = {}
-#     kube-proxy             = {}
-#     vpc-cni                = {}
-#   }
-#
-#   vpc_id          = module.networking.vpc_id  # Update to your VPC ID
-#   subnet_ids      = module.networking.private_subnet_ids
-#
-#   eks_managed_node_groups = {
-#     eks_nodes = {
-#       ami_type       = "AL2023_x86_64_STANDARD"
-#       instance_types = ["t3.small"]
-#       desired_capacity = 2
-#       max_capacity     = 2
-#       min_capacity     = 1
-#     }
-#   }
-#
-#   # Cluster access entry
-#   # To add the current caller identity as an administrator
-#   enable_cluster_creator_admin_permissions = true
-#
-#   tags = {
-#     Environment = "dev"
-#     Terraform   = "true"
-#   }
-# }
+module "eks_cluster_and_worker_nodes" {
+  source = "./modules/eks"
+  count = 0
+  # EKS Cluster
+  eks_cluster_name = var.eks_cluster_name
+  eks_cluster_role_arn = module.eks_iam_role.role_arn
+  eks_cluster_security_group_ids = [module.security.eks_cluster_sg, module.security.eks_node_sg]
+  eks_cluster_iam_policy_arn = module.eks_iam_role.iam_policy_arn
+  eks_cluster_subnet_ids = flatten([module.networking.public_subnet_ids, module.networking.private_subnet_ids])
+  # EKS node/worker
+  eks_node_group_name = ""
+  eks_nodes_role_arn = ""
+  private_subnet_ids = []
+  public_subnet_ids = []
+}
