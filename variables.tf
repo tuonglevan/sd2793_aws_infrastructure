@@ -10,6 +10,11 @@ variable "vpc_base_name" {
   type        = string
 }
 
+variable "create_nat_gateway" {
+  description = "Set to true to create the NAT gateway, set to false to skip creation"
+  type        = bool
+}
+
 variable "cidr_block" {
   description = "The CIDR block for the VPC."
   type        = string

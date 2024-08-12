@@ -5,7 +5,7 @@ update_packages() {
 }
 
 install_docker() {
-  echo "Install Docker engine"
+  echo "Installing Docker engine"
   sudo apt install \
     apt-transport-https \
     ca-certificates \
@@ -14,43 +14,56 @@ install_docker() {
     lsb-release -y
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  update_packages
   sudo apt-get install docker-ce docker-ce-cli containerd.io -y
   sudo usermod -aG docker ubuntu
 }
 
 install_unzip() {
-  echo "Install unzip"
+  echo "Installing unzip"
   sudo apt install unzip
 }
 
 install_aws_cli() {
-  echo "Install aws cli"
+  echo "Installing aws cli"
   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
   unzip awscliv2.zip
   sudo ./aws/install
 }
 
 install_java() {
-  echo "Install Java"
+  echo "Installing Java"
   sudo apt install fontconfig openjdk-17-jre -y
 }
 
-install_jenkins() {
-  echo "Install Jenkins"
-  sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian/jenkins.io-2023.key
-  echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
-  sudo apt-get install jenkins -y
-  echo "Setup docker In Jenkins"
+install_package() {
+  local package=$1
+  echo "Installing $package"
+  sudo apt-get install $package -y
+}
+
+setup_docker_for_jenkins() {
+  echo "Setting up Docker for Jenkins."
   sudo usermod -a -G docker jenkins
   echo "Changing the permissions on the Docker socket to allow the 'docker' group to read and write..."
   sudo chmod 666 /var/run/docker.sock
-  echo "Start and Enable Jenkins"
+}
+
+install_jenkins() {
+  echo "Installing Jenkins"
+  sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian/jenkins.io-2023.key
+  echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+  update_packages
+  sudo apt-get install jenkins -y
+  setup_docker_for_jenkins
+  echo "Starting and enabling Jenkins."
   sudo systemctl start jenkins
   sudo systemctl enable jenkins
 }
 
 install_kubectl() {
-  echo "Install kubectl"
+  echo "Installing kubectl"
+  update_packages
   curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
   curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
   echo "$(<kubectl.sha256) kubectl" | sha256sum --check

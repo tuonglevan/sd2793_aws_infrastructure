@@ -11,7 +11,7 @@ resource "aws_instance" "jenkins_docker_server" {
     volume_size = 20
   }
 
-  user_data = file("${path.module}/scripts/install_docker_jenkins")
+  user_data = file("${path.module}/scripts/initialize_jenkins")
 
   tags = {
     Name = "Jenkins Docker Server"

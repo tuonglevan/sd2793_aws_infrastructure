@@ -1,6 +1,7 @@
 region = "ap-southeast-1"
 # Networking
 vpc_base_name      = "Devops for Devs"
+create_nat_gateway = false
 cidr_block         = "10.0.0.0/16"
 availability_zones = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
 public_subnet_ips  = ["10.0.0.0/20", "10.0.16.0/20", "10.0.32.0/20"]
