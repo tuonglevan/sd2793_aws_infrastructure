@@ -1,5 +1,8 @@
 output "role_arn" {
-  value = aws_iam_role.eks_cluster.arn
+  value = {
+    cluster: aws_iam_role.eks_cluster.arn,
+    node_group: aws_iam_role.eks_nodes.arn
+  }
 }
 output "iam_policy_arn" {
   description = "IAM policy ARN"

@@ -1,6 +1,6 @@
 resource "aws_ecr_repository" "ecr_repo" {
-  count                = length(var.ecr_repos)
-  name                 = var.ecr_repos[count.index]
+  count                = length(var.repository_names)
+  name                 = var.repository_names[count.index]
   image_tag_mutability = var.image_tag_mutability
   force_delete = true
 

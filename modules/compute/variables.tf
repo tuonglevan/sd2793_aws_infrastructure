@@ -1,17 +1,16 @@
 variable "image_id" {
-  type        = string
   description = "The id of the machine image (AMI) to use for the server."
+  type        = string
 }
 
 variable "instance_type" {
+  description = "Type of EC2 instance to launch."
   type        = string
-  description = "Type of EC2 instance to launch. Example: t2.micro"
-  default = "t3.micro"
 }
 
 variable "subnet_id" {
-  type = string
   description = "The subnet ID to launch in"
+  type = string
   nullable = false
 }
 
