@@ -1,4 +1,4 @@
-# variable "eks_cluster_name" {
-#   description = "The name of your EKS cluster"
-#   type        = string
-# }
+variable "eks_provider_url" {
+  description = "The name of your EKS provider url"
+  type        = string
+}

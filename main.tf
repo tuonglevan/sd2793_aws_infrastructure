@@ -8,8 +8,8 @@ module "jenkins_iam_role" {
 # EKS
 module "eks_iam_role" {
   source = "./modules/iam_role/eks"
+  eks_provider_url = module.eks_cluster_and_worker_nodes.provider_url
 }
-
 # Complete VPC creation
 module "networking" {
   source             = "./modules/networking"
@@ -76,4 +76,6 @@ module "eks_cluster_and_worker_nodes" {
   node_role_arn = module.eks_iam_role.role_arn.node_group
   node_ec2_ssh_key_name = module.keypair.eks_node_keypair_path
   managed_node_groups = var.eks.managed_node_groups
+  # Addons
+  addon_ebs_csi_driver_role_arn = module.eks_iam_role.addons.ebs_csi_driver
 }

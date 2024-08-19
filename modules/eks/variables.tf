@@ -73,4 +73,8 @@ variable "managed_node_groups" {
     min_size          = number
   }))
 }
-
+# Addons
+variable "addon_ebs_csi_driver_role_arn" {
+  description = "The ARN of the IAM role used by the EBS CSI Driver addon for the EKS cluster. This role provides the necessary permissions for the EBS CSI Driver to operate correctly, such as provisioning, managing, and deleting EBS volumes."
+  type        = string
+}

@@ -57,5 +57,7 @@ download_max_pods_calculator
 INSTANCE_TYPE=$(cat | jq -r .instance_type)
 chmod +x max-pods-calculator.sh
 RESULT=$(./max-pods-calculator.sh --instance-type "${INSTANCE_TYPE}" --cni-version 1.9.0-eksbuild.1)
+# Remove file max-pods-calculator.sh
+rm max-pods-calculator.sh
 # Send JSON output as the final output
 jq -n --arg instance_type "$INSTANCE_TYPE" --arg result "$RESULT" '{"max_pods": $result}'

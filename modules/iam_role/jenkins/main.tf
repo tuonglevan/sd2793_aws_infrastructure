@@ -1,6 +1,7 @@
 locals {
   role_name = "jenkins"
   ecr_policy = "jenkins_ecr_policy"
+  eks_policy = "jenkins_eks_policy"
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {
@@ -8,7 +9,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
 	actions = ["sts:AssumeRole"]
 	principals {
 	  type        = "Service"
-	  identifiers = ["ec2.amazonaws.com"]
+	  identifiers = ["ec2.amazonaws.com", "eks.amazonaws.com"]
 	}
   }
 }
@@ -18,23 +19,26 @@ data "aws_iam_policy_document" "ecr_policy" {
 	actions = [
 	  "ecr:GetAuthorizationToken",
 	  "ecr:BatchCheckLayerAvailability",
-	  "ecr:GetDownloadUrlForLayer",
-	  "ecr:GetRepositoryPolicy",
-	  "ecr:DescribeRepositories",
-	  "ecr:ListImages",
-	  "ecr:DescribeImages",
-	  "ecr:BatchGetImage",
-	  "ecr:GetLifecyclePolicy",
-	  "ecr:GetLifecyclePolicyPreview",
-	  "ecr:ListTagsForResource",
-	  "ecr:DescribeImageScanFindings",
-	  "ecr:InitiateLayerUpload",
-	  "ecr:UploadLayerPart",
 	  "ecr:CompleteLayerUpload",
+	  "ecr:GetDownloadUrlForLayer",
+	  "ecr:InitiateLayerUpload",
+	  "ecr:ListImages",
 	  "ecr:PutImage",
+	  "ecr:UploadLayerPart"
 	]
 	resources = ["*"]
 	effect = "Allow"
+  }
+}
+
+data "aws_iam_policy_document" "eks_policy" {
+  statement {
+	actions = [
+	  "eks:DescribeCluster",
+	  "eks:ListClusters"
+	]
+	resources = ["*"]
+	effect    = "Allow"
   }
 }
 
@@ -43,6 +47,13 @@ resource "aws_iam_role_policy" "jenkins_ecr_policy" {
   role = aws_iam_role.jenkins.id
 
   policy = data.aws_iam_policy_document.ecr_policy.json
+}
+
+resource "aws_iam_role_policy" "jenkins_eks_policy" {
+  name = local.eks_policy
+  role = aws_iam_role.jenkins.id
+
+  policy = data.aws_iam_policy_document.eks_policy.json
 }
 
 resource "aws_iam_instance_profile" "jenkins" {
