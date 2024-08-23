@@ -18,51 +18,70 @@ This module handles the creation of VPC, EC2, ECR, and EKS resources on AWS usin
 - **ECR**: The module sets up an Elastic Container Registry.
 - **EKS**: The module creates an Elastic Kubernetes Service cluster.
 
-# Usage
-
-1. Clone the repository ```git clone https://github.com/tuonglevan/sd2793_aws_infastructure.git```
-2. Initialize Terraform
-   ```terraform init```
-3. Run Terraform apply to create the resources.
-   ```terraform apply --var-file "terraform.tfvars"```
-
-After running `terraform apply --var-file "terraform.tfvars"`, you will see the plan and you must type `yes` to proceed with the creation of the resources.
-
-# Variables
-You can define variables in a terraform.tfvars file or at the CLI. Below are the expected variables:
-
-- region: AWS region (ie. "ap-southeast-1")
-- vpc_base_name: Basename for the VPC
-- cidr_block: The CIDR block for the VPC
-- availability_zones: Availability zones for the subnets
-- public_subnet_ips: IP ranges for the public subnets
-- private_subnet_ips: IP ranges for the private subnets
-- ecr_repos: Names for the ECR repositories
-- image_tag_mutability: Tag mutability setting for the repositories
-- enable_scan_on_push: Whether to scan images on push
-- instance_type: Type of instance (ie. "t3.small")
-- image_id: AWS AMI ID
-
-For example, your terraform.tfvars file might look like:
-```hcl-terraform
-region                   = "ap-southeast-1"
-vpc_base_name            = "Devops for Devs"
-cidr_block               = "10.0.0.0/16"
-availability_zones       = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
-public_subnet_ips        = ["10.0.0.0/20", "10.0.16.0/20", "10.0.32.0/20"]
-private_subnet_ips       = ["10.0.48.0/20", "10.0.64.0/20", "10.0.80.0/20"]
-ecr_repos                = ["nodejs-backend", "react-frontend"]
-image_tag_mutability     = "MUTABLE"
-enable_scan_on_push      = true
-image_id                 = "ami-012c2e8e24e2ae21d"
-instance_type            = "t2.small"
-```
-
 # Resources Created
 
 This module will create:
 
 - A VPC with necessary subnets, gateway, nat gateway, and route tables
-- An EC2 instance
-- An ECR repository
+- EC2 instance
+- ECR repository
 - An EKS cluster
+- 2 Worker Nodes.
+- A Jenkins EC2 instance with:
+   - Docker
+   - AWS-CLI
+   - Kubectl
+
+# Configuration
+
+## Variables
+You can define variables in a `terraform.tfvars` file or at the CLI. Below are the expected variables:
+
+- `region`: AWS region (e.g., "ap-southeast-1")
+- `vpc_base_name`: Basename for the VPC
+- `cidr_block`: The CIDR block for the VPC
+- `availability_zones`: Availability zones for the subnets
+- `public_subnet_ips`: IP ranges for the public subnets
+- `private_subnet_ips`: IP ranges for the private subnets
+- `repository_names`: Names for the ECR repositories
+- `image_tag_mutability`: Tag mutability setting for the repositories (e.g., "MUTABLE" or "IMMUTABLE")
+- `enable_scan_on_push`: Whether to scan images on push (true or false)
+- `instance_type`: Type of instance (e.g., "t3.small")
+- `image_id`: AWS AMI ID
+- `jenkins_keypair_path`: Path to Jenkins key pair
+- `eks_node_keypair_path`: Path to EKS node key pair
+- `cluster_name`: EKS cluster name
+- `cluster_version`: EKS cluster version (e.g., "1.30")
+- `endpoint_public_access`: EKS endpoint public access (true or false)
+- `endpoint_private_access`: EKS endpoint private access (true or false)
+- `managed_node_groups`: A map of managed node groups
+
+## Usage
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/tuonglevan/sd2793_aws_infastructure.git
+   ```
+2. Change directory to the cloned repository:
+   ```sh
+   cd sd2793_aws_infastructure
+   ```
+3. Initialize Terraform:
+   ```sh
+   terraform init
+   ```
+4. Format and validate the Terraform code:
+   ```sh
+   terraform fmt
+   terraform validate
+   ```
+5. Run Terraform apply to create the resources:
+   ```sh
+   terraform apply -auto-approve --var-file "terraform.tfvars"
+   ```
+
+# Cleaning Up
+
+To destroy the infrastructure, run:
+```bash
+terraform destroy -auto-approve -var-file "terraform.tfvars"
+```
